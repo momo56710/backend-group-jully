@@ -1,0 +1,61 @@
+
+
+## 🧠 Student Challenge: Extend the Express Server
+
+You’ve worked with basic Express routes—now let’s level it up. You'll enhance the existing project with a new feature and practice reading/writing JSON files.
+
+---
+
+### 🔧 Task 1: Add a `PUT` Request to Update a User by `id`
+
+**Goal:**
+Allow updating a user's data (name, age, or city) by their `id`.
+
+**Steps:**
+
+1. Create a new route that listens for `PUT` requests on `/users/:id`.
+2. Read the `users.json` file and parse the data.
+3. Loop through or search to find the user that matches the `id` from the URL.
+4. Check which values were sent in the request body and update only those fields.
+5. Save the updated user list back to the file.
+6. Return the updated user data in the response.
+
+> 🔸 **Tip:** Handle cases when the `id` doesn't exist (send a 404 response).
+
+---
+
+### 📝 Task 2: Create a New JSON File for Blog Posts
+
+**Goal:**
+Add the ability to store blog posts in a new `posts.json` file.
+
+**Steps:**
+
+1. Create a new file called `posts.json` with an empty array and a counter (like you have in `users.json`).
+2. In your server file, add a `POST` route on `/posts`.
+3. Accept post data from the request body (e.g., title, content).
+4. Generate an `id` using the counter and append the post to the list.
+5. Save the updated posts array back to the file.
+
+> 🔸 **Tip:** Use the same `fs.readFileSync` and `fs.writeFileSync` pattern you used for users.
+
+---
+
+### 🔬 Task 3: Test Everything in Postman
+
+**Steps:**
+
+1. **GET `/` with query params** – Try adding a user via URL query.
+2. **POST `/`** – Add a user with `name`, `age`, `city` in the body.
+3. **GET `/users`** – Get all users, or filter by `id` or `name`.
+4. **PUT `/users/:id`** – Update a user’s info by `id`.
+5. **POST `/posts`** – Create a new post and check it’s saved.
+
+> 🔸 **Challenge:** Try updating only one field (e.g., just the city) and leave the others unchanged.
+
+---
+
+## 🧪 Bonus Challenge (Optional)
+
+* Add error handling for invalid JSON or missing fields.
+* Automatically create `posts.json` file if it doesn’t exist.
