@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="userForm">
+      <input type="text" id="name" name="name" placeholder="Name" />
+      <input type="email" id="email" name="email" placeholder="Email" />
+      <input type="text" id="address" name="address" placeholder="Address" />
+      <button type="submit">Create User</button>
+    </form>
+    <div id="users"></div>
+    <script>
+      //
+      const userForm = document.getElementById("userForm");
+      userForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const address = document.getElementById("address").value;
+        fetch("http://localhost:3002/api/users/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            localStorage.setItem("token", data.token);
+          });
+        fetch("http://localhost:3002/api/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ name, email, address }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            alert(data.message + " " + data.error);
+          })
+          .catch((err) => {
+            console.log(err);
+            alert(err.message + " " + err.error);
+          });
+      });
+      fetch("http://localhost:3002/api/users")
+        .then((res) => res.json())
+        .then((data) => {
+          data.users.forEach((user) => {
+            const userDiv = document.createElement("div");
+            userDiv.innerHTML = `
+            <h2>${user.name}</h2>
+            <p>${user.email}</p>
+            <p>${user.address}</p>`;
+            document.getElementById("users").appendChild(userDiv);
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    </script>
+  </body>
+</html>
