@@ -1,0 +1,610 @@
+{
+  "id": "express-mongoose-ecommerce",
+  "title": "Express.js & Mongoose E-commerce API Quiz",
+  "description": "Test your knowledge of Express.js, Mongoose, and e-commerce API development",
+  "category": "Backend Development",
+  "difficulty": "Advanced",
+  "language": "en",
+  "questions": [
+    {
+      "id": 1,
+      "question": {
+        "en": "In Express.js, what happens if you call next() without arguments in middleware?",
+        "fr": "Dans Express.js, que se passe-t-il si vous appelez next() sans arguments dans un middleware ?",
+        "ar": "في Express.js، ماذا يحدث إذا استدعيت next() بدون معاملات في middleware؟"
+      },
+      "options": [
+        "Skips all remaining middleware",
+        "Throws an error",
+        "Passes control to the next middleware",
+        "Ends the request-response cycle"
+      ],
+      "correctAnswer": 2,
+      "explanation": {
+        "en": "Calling next() without arguments passes control to the next middleware function in the stack. If you pass an argument to next(), it triggers error handling.",
+        "fr": "Appeler next() sans arguments passe le contrôle à la fonction middleware suivante dans la pile. Si vous passez un argument à next(), cela déclenche la gestion d'erreur.",
+        "ar": "استدعاء next() بدون معاملات ينقل التحكم إلى وظيفة middleware التالية في المكدس. إذا مررت معاملاً إلى next()، فإن ذلك يؤدي إلى معالجة الأخطاء."
+      }
+    },
+    {
+      "id": 2,
+      "question": {
+        "en": "Which CORS configuration allows requests from any origin but restricts methods?",
+        "fr": "Quelle configuration CORS permet les requêtes de toute origine mais restreint les méthodes ?",
+        "ar": "أي تكوين CORS يسمح بالطلبات من أي مصدر ولكن يقيد الطرق؟"
+      },
+      "options": [
+        "{ origin: '*', methods: ['GET', 'POST'] }",
+        "{ origin: true, allowedMethods: ['GET'] }",
+        "{ credentials: true, methods: 'GET,POST' }",
+        "{ allowOrigin: '*', restrictMethods: true }"
+      ],
+      "correctAnswer": 0,
+      "explanation": {
+        "en": "Setting origin to '*' allows any origin, while the methods array restricts which HTTP methods are allowed. The other options contain invalid CORS properties.",
+        "fr": "Définir origin à '*' permet toute origine, tandis que le tableau methods restreint quelles méthodes HTTP sont autorisées. Les autres options contiennent des propriétés CORS invalides.",
+        "ar": "تعيين origin إلى '*' يسمح بأي مصدر، بينما مصفوفة methods تقيد طرق HTTP المسموحة. الخيارات الأخرى تحتوي على خصائص CORS غير صالحة."
+      }
+    },
+    {
+      "id": 3,
+      "question": {
+        "en": "What happens if you don't use express.json() but try to access req.body?",
+        "fr": "Que se passe-t-il si vous n'utilisez pas express.json() mais essayez d'accéder à req.body ?",
+        "ar": "ماذا يحدث إذا لم تستخدم express.json() ولكن حاولت الوصول إلى req.body؟"
+      },
+      "options": [
+        "req.body will be null",
+        "req.body will be an empty string",
+        "req.body will be undefined",
+        "An error will be thrown"
+      ],
+      "correctAnswer": 2,
+      "explanation": {
+        "en": "Without express.json() middleware, req.body will be undefined because Express doesn't parse the request body by default.",
+        "fr": "Sans le middleware express.json(), req.body sera undefined car Express ne parse pas le corps de la requête par défaut.",
+        "ar": "بدون middleware express.json()، سيكون req.body undefined لأن Express لا يحلل جسم الطلب افتراضياً."
+      }
+    },
+    {
+      "id": 4,
+      "question": {
+        "en": "Which statement about Mongoose connection is most accurate?",
+        "fr": "Quelle affirmation sur la connexion Mongoose est la plus précise ?",
+        "ar": "أي عبارة حول اتصال Mongoose هي الأكثر دقة؟"
+      },
+      "options": [
+        "mongoose.connect() is synchronous and blocks execution",
+        "mongoose.connect() returns a Promise that resolves when connected",
+        "mongoose.connect() automatically retries failed connections infinitely",
+        "mongoose.connect() requires a callback function to handle connection"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "mongoose.connect() returns a Promise that resolves when the connection is established, allowing you to use .then() or await syntax.",
+        "fr": "mongoose.connect() retourne une Promise qui se résout lorsque la connexion est établie, vous permettant d'utiliser la syntaxe .then() ou await.",
+        "ar": "mongoose.connect() ترجع Promise تُحل عند إنشاء الاتصال، مما يتيح لك استخدام صيغة .then() أو await."
+      }
+    },
+    {
+      "id": 5,
+      "question": {
+        "en": "In Mongoose, what's the difference between a Schema and a Model?",
+        "fr": "Dans Mongoose, quelle est la différence entre un Schema et un Model ?",
+        "ar": "في Mongoose، ما الفرق بين Schema و Model؟"
+      },
+      "options": [
+        "Schema defines structure, Model creates documents",
+        "No difference, they're interchangeable terms",
+        "Schema is for validation, Model is for queries",
+        "Schema is the database, Model is the collection"
+      ],
+      "correctAnswer": 0,
+      "explanation": {
+        "en": "A Schema defines the structure and rules for documents, while a Model is a constructor compiled from the Schema that creates and manages documents.",
+        "fr": "Un Schema définit la structure et les règles pour les documents, tandis qu'un Model est un constructeur compilé à partir du Schema qui crée et gère les documents.",
+        "ar": "Schema يحدد البنية والقواعد للمستندات، بينما Model هو منشئ مُجمع من Schema ينشئ ويدير المستندات."
+      }
+    },
+    {
+      "id": 6,
+      "question": {
+        "en": "What does `timestamps: true` do in a Mongoose schema?",
+        "fr": "Que fait `timestamps: true` dans un schéma Mongoose ?",
+        "ar": "ماذا يفعل `timestamps: true` في مخطط Mongoose؟"
+      },
+      "options": [
+        "Creates indexed fields for faster queries",
+        "Adds validation for date fields only",
+        "Enables automatic backup timestamps",
+        "Automatically adds `createdAt` and `updatedAt` fields"
+      ],
+      "correctAnswer": 3,
+      "explanation": {
+        "en": "`timestamps: true` automatically adds `createdAt` and `updatedAt` fields to documents, which are automatically managed by Mongoose.",
+        "fr": "`timestamps: true` ajoute automatiquement les champs `createdAt` et `updatedAt` aux documents, qui sont automatiquement gérés par Mongoose.",
+        "ar": "`timestamps: true` يضيف تلقائياً حقول `createdAt` و `updatedAt` للمستندات، والتي يتم إدارتها تلقائياً بواسطة Mongoose."
+      }
+    },
+    {
+      "id": 7,
+      "question": {
+        "en": "What is the purpose of `versionKey: false` in a Mongoose schema?",
+        "fr": "Quel est l'objectif de `versionKey: false` dans un schéma Mongoose ?",
+        "ar": "ما هو الغرض من `versionKey: false` في مخطط Mongoose؟"
+      },
+      "options": [
+        "Removes the `__v` field from documents",
+        "Disables schema version checking",
+        "Prevents document updates after creation",
+        "Enables faster query performance"
+      ],
+      "correctAnswer": 0,
+      "explanation": {
+        "en": "`versionKey: false` removes the `__v` field that Mongoose automatically adds to documents for versioning purposes.",
+        "fr": "`versionKey: false` supprime le champ `__v` que Mongoose ajoute automatiquement aux documents à des fins de versioning.",
+        "ar": "`versionKey: false` يزيل حقل `__v` الذي يضيفه Mongoose تلقائياً للمستندات لأغراض الإصدارات."
+      }
+    },
+    {
+      "id": 8,
+      "question": {
+        "en": "What is the purpose of `ref` in a Mongoose schema field?",
+        "fr": "Quel est l'objectif de `ref` dans un champ de schéma Mongoose ?",
+        "ar": "ما هو الغرض من `ref` في حقل مخطط Mongoose؟"
+      },
+      "options": [
+        "To reference external API endpoints",
+        "To establish relationships between collections",
+        "To create automatic field references",
+        "To enable field-level caching"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "The `ref` property establishes a relationship between documents in different collections, enabling population of referenced documents.",
+        "fr": "La propriété `ref` établit une relation entre les documents dans différentes collections, permettant la population des documents référencés.",
+        "ar": "خاصية `ref` تنشئ علاقة بين المستندات في مجموعات مختلفة، مما يتيح ملء المستندات المشار إليها."
+      }
+    },
+    {
+      "id": 9,
+      "question": {
+        "en": "What does the `populate()` method do in Mongoose?",
+        "fr": "Que fait la méthode `populate()` dans Mongoose ?",
+        "ar": "ماذا تفعل طريقة `populate()` في Mongoose؟"
+      },
+      "options": [
+        "Fills empty collections with default data",
+        "Adds multiple documents to a collection at once",
+        "Replaces referenced ObjectIds with actual documents",
+        "Populates schema fields with random test data"
+      ],
+      "correctAnswer": 2,
+      "explanation": {
+        "en": "The `populate()` method replaces the specified paths in the document with actual documents from other collections, based on the `ref` field.",
+        "fr": "La méthode `populate()` remplace les chemins spécifiés dans le document par des documents réels d'autres collections, basés sur le champ `ref`.",
+        "ar": "طريقة `populate()` تستبدل المسارات المحددة في المستند بمستندات فعلية من مجموعات أخرى، بناءً على حقل `ref`."
+      }
+    },
+    {
+      "id": 10,
+      "question": {
+        "en": "What is the difference between `findByIdAndUpdate` and `findByIdAndUpdate` with `{new: true}`?",
+        "fr": "Quelle est la différence entre `findByIdAndUpdate` et `findByIdAndUpdate` avec `{new: true}` ?",
+        "ar": "ما الفرق بين `findByIdAndUpdate` و `findByIdAndUpdate` مع `{new: true}`؟"
+      },
+      "options": [
+        "`{new: true}` creates a completely new document",
+        "`{new: true}` enables upsert functionality",
+        "`{new: true}` returns the updated document instead of the original",
+        "`{new: true}` validates data before updating"
+      ],
+      "correctAnswer": 2,
+      "explanation": {
+        "en": "By default, `findByIdAndUpdate` returns the original document. With `{new: true}`, it returns the updated document instead.",
+        "fr": "Par défaut, `findByIdAndUpdate` retourne le document original. Avec `{new: true}`, il retourne le document mis à jour à la place.",
+        "ar": "افتراضياً، `findByIdAndUpdate` ترجع المستند الأصلي. مع `{new: true}`، ترجع المستند المحدث بدلاً من ذلك."
+      }
+    },
+    {
+      "id": 11,
+      "question": {
+        "en": "What does `runValidators: true` do in Mongoose update operations?",
+        "fr": "Que fait `runValidators: true` dans les opérations de mise à jour Mongoose ?",
+        "ar": "ماذا يفعل `runValidators: true` في عمليات التحديث في Mongoose؟"
+      },
+      "options": [
+        "Enables automatic data type conversion",
+        "Optimizes update query performance",
+        "Runs schema validators during updates",
+        "Forces validation on all document fields"
+      ],
+      "correctAnswer": 2,
+      "explanation": {
+        "en": "`runValidators: true` ensures that schema validators are run during update operations, not just during document creation.",
+        "fr": "`runValidators: true` garantit que les validateurs de schéma sont exécutés pendant les opérations de mise à jour, pas seulement pendant la création de documents.",
+        "ar": "`runValidators: true` يضمن تشغيل محققات المخطط أثناء عمليات التحديث، وليس فقط أثناء إنشاء المستندات."
+      }
+    },
+    {
+      "id": 12,
+      "question": {
+        "en": "What is the purpose of `select()` in Mongoose queries?",
+        "fr": "Quel est l'objectif de `select()` dans les requêtes Mongoose ?",
+        "ar": "ما هو الغرض من `select()` في استعلامات Mongoose؟"
+      },
+      "options": [
+        "To specify which fields to include or exclude",
+        "To filter documents based on conditions",
+        "To limit the number of returned documents",
+        "To choose which collection to query from"
+      ],
+      "correctAnswer": 0,
+      "explanation": {
+        "en": "`select()` allows you to specify which fields to include or exclude from the query results, helping to optimize performance and reduce data transfer.",
+        "fr": "`select()` vous permet de spécifier quels champs inclure ou exclure des résultats de requête, aidant à optimiser les performances et réduire le transfert de données.",
+        "ar": "`select()` تتيح لك تحديد الحقول التي يجب تضمينها أو استبعادها من نتائج الاستعلام، مما يساعد في تحسين الأداء وتقليل نقل البيانات."
+      }
+    },
+    {
+      "id": 13,
+      "question": {
+        "en": "What is the purpose of `unique: true` in a Mongoose schema field?",
+        "fr": "Quel est l'objectif de `unique: true` dans un champ de schéma Mongoose ?",
+        "ar": "ما هو الغرض من `unique: true` في حقل مخطط Mongoose؟"
+      },
+      "options": [
+        "To automatically generate unique values for the field",
+        "To ensure no duplicate values in the collection",
+        "To make the field searchable across collections",
+        "To enable field-level data compression"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "`unique: true` creates a unique index on the field, ensuring that no two documents in the collection can have the same value for that field.",
+        "fr": "`unique: true` crée un index unique sur le champ, garantissant qu'aucun document dans la collection ne peut avoir la même valeur pour ce champ.",
+        "ar": "`unique: true` تنشئ فهرس فريد على الحقل، مما يضمن عدم وجود مستندين في المجموعة لهما نفس القيمة لهذا الحقل."
+      }
+    },
+    {
+      "id": 14,
+      "question": {
+        "en": "What is the purpose of custom validators in Mongoose schemas?",
+        "fr": "Quel est l'objectif des validateurs personnalisés dans les schémas Mongoose ?",
+        "ar": "ما هو الغرض من المحققات المخصصة في مخططات Mongoose؟"
+      },
+      "options": [
+        "To automatically format field values on save",
+        "To define custom validation rules for fields",
+        "To create compound indexes on multiple fields",
+        "To enable cross-field validation dependencies"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "Custom validators allow you to define specific validation rules for fields, such as format requirements, length restrictions, or business logic validation.",
+        "fr": "Les validateurs personnalisés vous permettent de définir des règles de validation spécifiques pour les champs, telles que les exigences de format, les restrictions de longueur ou la validation de la logique métier.",
+        "ar": "المحققات المخصصة تتيح لك تحديد قواعد تحقق محددة للحقول، مثل متطلبات التنسيق أو قيود الطول أو التحقق من منطق الأعمال."
+      }
+    },
+    {
+      "id": 15,
+      "question": {
+        "en": "What is the purpose of `mongoose.Schema.Types.ObjectId`?",
+        "fr": "Quel est l'objectif de `mongoose.Schema.Types.ObjectId` ?",
+        "ar": "ما هو الغرض من `mongoose.Schema.Types.ObjectId`؟"
+      },
+      "options": [
+        "To generate unique identifiers automatically",
+        "To create indexed string fields",
+        "To define MongoDB ObjectId fields for references",
+        "To enable object-oriented field types"
+      ],
+      "correctAnswer": 2,
+      "explanation": {
+        "en": "`mongoose.Schema.Types.ObjectId` is used to define fields that store MongoDB ObjectIds, typically for creating references between documents.",
+        "fr": "`mongoose.Schema.Types.ObjectId` est utilisé pour définir des champs qui stockent des ObjectIds MongoDB, généralement pour créer des références entre documents.",
+        "ar": "`mongoose.Schema.Types.ObjectId` يستخدم لتعريف الحقول التي تخزن ObjectIds من MongoDB، عادةً لإنشاء مراجع بين المستندات."
+      }
+    },
+    {
+      "id": 16,
+      "question": {
+        "en": "What is the purpose of `default` in a Mongoose schema field?",
+        "fr": "Quel est l'objectif de `default` dans un champ de schéma Mongoose ?",
+        "ar": "ما هو الغرض من `default` في حقل مخطط Mongoose؟"
+      },
+      "options": [
+        "To make the field required",
+        "To specify a default value when creating documents",
+        "To create an index",
+        "To validate the field"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "The `default` property specifies a value that will be automatically assigned to the field if no value is provided when creating a document.",
+        "fr": "La propriété `default` spécifie une valeur qui sera automatiquement assignée au champ si aucune valeur n'est fournie lors de la création d'un document.",
+        "ar": "خاصية `default` تحدد قيمة سيتم تعيينها تلقائياً للحقل إذا لم يتم توفير قيمة عند إنشاء مستند."
+      }
+    },
+    {
+      "id": 17,
+      "question": {
+        "en": "What is the purpose of `required: true` in a Mongoose schema field?",
+        "fr": "Quel est l'objectif de `required: true` dans un champ de schéma Mongoose ?",
+        "ar": "ما هو الغرض من `required: true` في حقل مخطط Mongoose؟"
+      },
+      "options": [
+        "To create an index",
+        "To make the field mandatory when creating documents",
+        "To validate the field format",
+        "To encrypt the field data"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "`required: true` makes the field mandatory, meaning a document cannot be saved without providing a value for this field.",
+        "fr": "`required: true` rend le champ obligatoire, ce qui signifie qu'un document ne peut pas être sauvegardé sans fournir une valeur pour ce champ.",
+        "ar": "`required: true` يجعل الحقل إلزامياً، مما يعني أنه لا يمكن حفظ مستند بدون توفير قيمة لهذا الحقل."
+      }
+    },
+    {
+      "id": 18,
+      "question": {
+        "en": "What is the purpose of `validate` in a Mongoose schema field?",
+        "fr": "Quel est l'objectif de `validate` dans un champ de schéma Mongoose ?",
+        "ar": "ما هو الغرض من `validate` في حقل مخطط Mongoose؟"
+      },
+      "options": [
+        "To define custom validation rules for the field",
+        "To enable automatic data sanitization",
+        "To create field-level security policies",
+        "To configure database-level constraints"
+      ],
+      "correctAnswer": 0,
+      "explanation": {
+        "en": "The `validate` property allows you to define custom validation functions that check if the field value meets specific criteria before saving the document.",
+        "fr": "La propriété `validate` vous permet de définir des fonctions de validation personnalisées qui vérifient si la valeur du champ répond à des critères spécifiques avant de sauvegarder le document.",
+        "ar": "خاصية `validate` تتيح لك تعريف وظائف تحقق مخصصة تتحقق من أن قيمة الحقل تلبي معايير محددة قبل حفظ المستند."
+      }
+    },
+    {
+      "id": 19,
+      "question": {
+        "en": "What is the purpose of `message` in a Mongoose validator?",
+        "fr": "Quel est l'objectif de `message` dans un validateur Mongoose ?",
+        "ar": "ما هو الغرض من `message` في محقق Mongoose؟"
+      },
+      "options": [
+        "To create database indexes",
+        "To provide a custom error message when validation fails",
+        "To encrypt sensitive data",
+        "To optimize query performance"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "The `message` property provides a custom error message that will be returned when the validation fails, making it easier to understand what went wrong.",
+        "fr": "La propriété `message` fournit un message d'erreur personnalisé qui sera retourné lorsque la validation échoue, facilitant la compréhension de ce qui s'est mal passé.",
+        "ar": "خاصية `message` توفر رسالة خطأ مخصصة سيتم إرجاعها عند فشل التحقق، مما يسهل فهم ما حدث خطأ."
+      }
+    },
+    {
+      "id": 20,
+      "question": {
+        "en": "What is the purpose of `router.get('/:id', getUserById)` in Express.js?",
+        "fr": "Quel est l'objectif de `router.get('/:id', getUserById)` dans Express.js ?",
+        "ar": "ما هو الغرض من `router.get('/:id', getUserById)` في Express.js؟"
+      },
+      "options": [
+        "To create a new user",
+        "To handle GET requests for a specific user by ID",
+        "To update a user",
+        "To delete a user"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "This route handles GET requests to fetch a specific user by their ID, where `:id` is a route parameter that captures the user ID from the URL.",
+        "fr": "Cette route gère les requêtes GET pour récupérer un utilisateur spécifique par son ID, où `:id` est un paramètre de route qui capture l'ID de l'utilisateur depuis l'URL.",
+        "ar": "هذا المسار يتعامل مع طلبات GET لجلب مستخدم محدد بواسطة معرفه، حيث `:id` هو معامل مسار يلتقط معرف المستخدم من URL."
+      }
+    },
+    {
+      "id": 21,
+      "question": {
+        "en": "What is the purpose of `router.post('/', createUser)` in Express.js?",
+        "fr": "Quel est l'objectif de `router.post('/', createUser)` dans Express.js ?",
+        "ar": "ما هو الغرض من `router.post('/', createUser)` في Express.js؟"
+      },
+      "options": [
+        "To get all users",
+        "To handle POST requests to create a new user",
+        "To update an existing user",
+        "To delete a user"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "This route handles POST requests to create a new user, typically receiving user data in the request body.",
+        "fr": "Cette route gère les requêtes POST pour créer un nouvel utilisateur, recevant généralement les données utilisateur dans le corps de la requête.",
+        "ar": "هذا المسار يتعامل مع طلبات POST لإنشاء مستخدم جديد، عادةً يستقبل بيانات المستخدم في جسم الطلب."
+      }
+    },
+    {
+      "id": 22,
+      "question": {
+        "en": "What is the purpose of `router.put('/:id', updateUser)` in Express.js?",
+        "fr": "Quel est l'objectif de `router.put('/:id', updateUser)` dans Express.js ?",
+        "ar": "ما هو الغرض من `router.put('/:id', updateUser)` في Express.js؟"
+      },
+      "options": [
+        "To create a new user",
+        "To handle PUT requests to update an existing user",
+        "To get a specific user",
+        "To delete a user"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "This route handles PUT requests to update an existing user, where the user ID is specified in the URL and the updated data is in the request body.",
+        "fr": "Cette route gère les requêtes PUT pour mettre à jour un utilisateur existant, où l'ID de l'utilisateur est spécifié dans l'URL et les données mises à jour sont dans le corps de la requête.",
+        "ar": "هذا المسار يتعامل مع طلبات PUT لتحديث مستخدم موجود، حيث يتم تحديد معرف المستخدم في URL والبيانات المحدثة في جسم الطلب."
+      }
+    },
+    {
+      "id": 23,
+      "question": {
+        "en": "What is the purpose of `router.delete('/:id', deleteUser)` in Express.js?",
+        "fr": "Quel est l'objectif de `router.delete('/:id', deleteUser)` dans Express.js ?",
+        "ar": "ما هو الغرض من `router.delete('/:id', deleteUser)` في Express.js؟"
+      },
+      "options": [
+        "To create a new user",
+        "To handle DELETE requests to remove a user",
+        "To update an existing user",
+        "To get a specific user"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "This route handles DELETE requests to remove a user from the database, where the user ID is specified in the URL.",
+        "fr": "Cette route gère les requêtes DELETE pour supprimer un utilisateur de la base de données, où l'ID de l'utilisateur est spécifié dans l'URL.",
+        "ar": "هذا المسار يتعامل مع طلبات DELETE لإزالة مستخدم من قاعدة البيانات، حيث يتم تحديد معرف المستخدم في URL."
+      }
+    },
+    {
+      "id": 24,
+      "question": {
+        "en": "What is the purpose of `app.use('/api/users', userRoutes)` in Express.js?",
+        "fr": "Quel est l'objectif de `app.use('/api/users', userRoutes)` dans Express.js ?",
+        "ar": "ما هو الغرض من `app.use('/api/users', userRoutes)` في Express.js؟"
+      },
+      "options": [
+        "To create a new user",
+        "To mount user routes under the '/api/users' path",
+        "To delete all users",
+        "To validate user data"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "This middleware mounts all user routes under the '/api/users' path, so routes like '/api/users/:id' become available.",
+        "fr": "Ce middleware monte toutes les routes utilisateur sous le chemin '/api/users', de sorte que les routes comme '/api/users/:id' deviennent disponibles.",
+        "ar": "هذا middleware يثبت جميع مسارات المستخدمين تحت المسار '/api/users'، بحيث تصبح المسارات مثل '/api/users/:id' متاحة."
+      }
+    },
+    {
+      "id": 25,
+      "question": {
+        "en": "What is the purpose of error handling in Express.js controllers?",
+        "fr": "Quel est l'objectif de la gestion d'erreurs dans les contrôleurs Express.js ?",
+        "ar": "ما هو الغرض من معالجة الأخطاء في وحدات التحكم في Express.js؟"
+      },
+      "options": [
+        "To create new documents",
+        "To gracefully handle errors and provide meaningful responses",
+        "To optimize database queries",
+        "To encrypt sensitive data"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "Error handling in controllers ensures that when errors occur (like database connection issues or validation failures), the application responds with appropriate error messages and status codes instead of crashing.",
+        "fr": "La gestion d'erreurs dans les contrôleurs garantit que lorsque des erreurs se produisent (comme des problèmes de connexion à la base de données ou des échecs de validation), l'application répond avec des messages d'erreur et des codes de statut appropriés au lieu de planter.",
+        "ar": "معالجة الأخطاء في وحدات التحكم تضمن أنه عند حدوث أخطاء (مثل مشاكل الاتصال بقاعدة البيانات أو فشل التحقق)، يستجيب التطبيق برسائل خطأ مناسبة ورموز حالة بدلاً من التعطل."
+      }
+    },
+    {
+      "id": 26,
+      "question": {
+        "en": "What is the purpose of `try-catch` blocks in async functions?",
+        "fr": "Quel est l'objectif des blocs `try-catch` dans les fonctions asynchrones ?",
+        "ar": "ما هو الغرض من كتل `try-catch` في الوظائف غير المتزامنة؟"
+      },
+      "options": [
+        "To create new documents",
+        "To handle errors that might occur during asynchronous operations",
+        "To optimize database queries",
+        "To validate data"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "`try-catch` blocks in async functions allow you to catch and handle errors that might occur during asynchronous operations like database queries, API calls, or file operations.",
+        "fr": "Les blocs `try-catch` dans les fonctions asynchrones vous permettent de capturer et gérer les erreurs qui peuvent se produire pendant les opérations asynchrones comme les requêtes de base de données, les appels API ou les opérations de fichiers.",
+        "ar": "كتل `try-catch` في الوظائف غير المتزامنة تتيح لك التقاط ومعالجة الأخطاء التي قد تحدث أثناء العمليات غير المتزامنة مثل استعلامات قاعدة البيانات أو استدعاءات API أو عمليات الملفات."
+      }
+    },
+    {
+      "id": 27,
+      "question": {
+        "en": "What is the purpose of `res.status()` in Express.js responses?",
+        "fr": "Quel est l'objectif de `res.status()` dans les réponses Express.js ?",
+        "ar": "ما هو الغرض من `res.status()` في استجابات Express.js؟"
+      },
+      "options": [
+        "To create new documents",
+        "To set the HTTP status code for the response",
+        "To validate request data",
+        "To encrypt response data"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "`res.status()` sets the HTTP status code for the response, such as 200 for success, 201 for created, 400 for bad request, 404 for not found, or 500 for server error.",
+        "fr": "`res.status()` définit le code de statut HTTP pour la réponse, comme 200 pour succès, 201 pour créé, 400 pour mauvaise requête, 404 pour non trouvé, ou 500 pour erreur serveur.",
+        "ar": "`res.status()` تحدد رمز حالة HTTP للاستجابة، مثل 200 للنجاح، 201 للمنشأ، 400 لطلب سيء، 404 للغير موجود، أو 500 لخطأ الخادم."
+      }
+    },
+    {
+      "id": 28,
+      "question": {
+        "en": "What is the purpose of `res.json()` in Express.js responses?",
+        "fr": "Quel est l'objectif de `res.json()` dans les réponses Express.js ?",
+        "ar": "ما هو الغرض من `res.json()` في استجابات Express.js؟"
+      },
+      "options": [
+        "To create new documents",
+        "To send JSON data as the response",
+        "To validate request data",
+        "To encrypt response data"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "`res.json()` sends JSON data as the response, automatically setting the Content-Type header to 'application/json' and converting JavaScript objects to JSON format.",
+        "fr": "`res.json()` envoie des données JSON comme réponse, définissant automatiquement l'en-tête Content-Type à 'application/json' et convertissant les objets JavaScript au format JSON.",
+        "ar": "`res.json()` ترسل بيانات JSON كاستجابة، وتحدد تلقائياً رأس Content-Type إلى 'application/json' وتحول كائنات JavaScript إلى تنسيق JSON."
+      }
+    },
+    {
+      "id": 29,
+      "question": {
+        "en": "What is the purpose of `req.body` in Express.js?",
+        "fr": "Quel est l'objectif de `req.body` dans Express.js ?",
+        "ar": "ما هو الغرض من `req.body` في Express.js؟"
+      },
+      "options": [
+        "To access URL parameters",
+        "To access the request body data",
+        "To access query parameters",
+        "To access request headers"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "`req.body` contains the parsed request body data, typically used to access form data, JSON data, or other data sent in the request body.",
+        "fr": "`req.body` contient les données du corps de la requête analysées, généralement utilisées pour accéder aux données de formulaire, données JSON ou autres données envoyées dans le corps de la requête.",
+        "ar": "`req.body` تحتوي على بيانات جسم الطلب المحللة، عادةً تستخدم للوصول إلى بيانات النموذج أو بيانات JSON أو بيانات أخرى مرسلة في جسم الطلب."
+      }
+    },
+    {
+      "id": 30,
+      "question": {
+        "en": "What is the purpose of `req.params` in Express.js?",
+        "fr": "Quel est l'objectif de `req.params` dans Express.js ?",
+        "ar": "ما هو الغرض من `req.params` في Express.js؟"
+      },
+      "options": [
+        "To access request body data",
+        "To access route parameters from the URL",
+        "To access query parameters",
+        "To access request headers"
+      ],
+      "correctAnswer": 1,
+      "explanation": {
+        "en": "`req.params` contains route parameters extracted from the URL path, such as `:id` in `/users/:id` which would be accessible as `req.params.id`.",
+        "fr": "`req.params` contient les paramètres de route extraits du chemin URL, comme `:id` dans `/users/:id` qui serait accessible comme `req.params.id`.",
+        "ar": "`req.params` تحتوي على معاملات المسار المستخرجة من مسار URL، مثل `:id` في `/users/:id` والتي ستكون متاحة كـ `req.params.id`."
+      }
+    }
+  ]
+} 
