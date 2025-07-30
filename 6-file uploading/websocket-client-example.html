@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Client Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .connected { background-color: #d4edda; color: #155724; }
+        .disconnected { background-color: #f8d7da; color: #721c24; }
+        .authenticated { background-color: #d1ecf1; color: #0c5460; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .message {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 3px;
+            border-left: 3px solid #007bff;
+            font-size: 15px;
+            position: relative;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        .badge-info { background: #007bff; color: #fff; }
+        .badge-success { background: #28a745; color: #fff; }
+        .badge-error { background: #dc3545; color: #fff; }
+        .badge-auth { background: #17a2b8; color: #fff; }
+        .badge-system { background: #6c757d; color: #fff; }
+        .badge-echo { background: #ffc107; color: #212529; }
+        .badge-sent { background: #6610f2; color: #fff; }
+        .msg-content {
+            display: block;
+            margin-top: 4px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .msg-time {
+            font-size: 11px;
+            color: #888;
+            position: absolute;
+            top: 8px;
+            right: 12px;
+        }
+        input, button {
+            padding: 8px;
+            margin: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        #messages {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebSocket Client with Authentication</h1>
+    
+    <div class="container" id="signupContainer">
+        <h3>Sign Up</h3>
+        <div>
+            <label for="signupName">Name:</label>
+            <input type="text" id="signupName" placeholder="Enter your name" style="width: 200px;">
+        </div>
+        <div>
+            <label for="signupUsername">Username:</label>
+            <input type="text" id="signupUsername" placeholder="Choose a username" style="width: 200px;">
+        </div>
+        <div>
+            <label for="signupEmail">Email:</label>
+            <input type="email" id="signupEmail" placeholder="Enter your email" style="width: 200px;">
+        </div>
+        <div>
+            <label for="signupPassword">Password:</label>
+            <input type="password" id="signupPassword" placeholder="Enter your password" style="width: 200px;">
+        </div>
+        <button onclick="signup()" id="signupBtn">Sign Up</button>
+        <span id="signupStatus" style="margin-left:10px;color:#dc3545;"></span>
+        <div style="margin-top:10px;">
+            Already have an account? <a href="#" onclick="showLogin();return false;">Login here</a>
+        </div>
+    </div>
+
+    <div class="container" id="loginContainer" style="display:none;">
+        <h3>Login</h3>
+        <div>
+            <label for="loginEmail">Email:</label>
+            <input type="email" id="loginEmail" placeholder="Enter your email" style="width: 200px;">
+        </div>
+        <div>
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" placeholder="Enter your password" style="width: 200px;">
+        </div>
+        <button onclick="login()" id="loginBtn">Login</button>
+        <span id="loginStatus" style="margin-left:10px;color:#dc3545;"></span>
+        <div style="margin-top:10px;">
+            Don't have an account? <a href="#" onclick="showSignup();return false;">Sign up here</a>
+        </div>
+    </div>
+
+    <div class="container" id="connectionContainer" style="display:none;">
+        <h3>Connection Settings</h3>
+        <div>
+            <label for="serverUrl">Server URL:</label>
+            <input type="text" id="serverUrl" value="ws://192.168.100.20:5002" style="width: 200px;">
+        </div>
+        <div id="userInfo" style="margin: 8px 0; color: #007bff;"></div>
+        <button onclick="connect()" id="connectBtn">Connect</button>
+        <button onclick="disconnect()" id="disconnectBtn" disabled>Disconnect</button>
+    </div>
+
+    <div class="container">
+        <h3>Connection Status</h3>
+        <div id="status" class="status disconnected">Disconnected</div>
+    </div>
+
+    <div class="container">
+        <h3>Send Message</h3>
+        <div>
+            <input type="text" id="messageInput" placeholder="Enter message" style="width: 300px;">
+            <input type="text" id="toUsername" placeholder="Recipient username (leave blank for broadcast)" style="width: 220px;">
+            <button onclick="sendMessage()" id="sendBtn" disabled>Send</button>
+        </div>
+        <div style="font-size:12px;color:#888;">Leave recipient blank to broadcast to all users.</div>
+    </div>
+
+    <div class="container">
+        <h3>Received Messages</h3>
+        <div id="messages"></div>
+    </div>
+
+    <script>
+        // ========================================
+        // WEBSOCKET CLIENT WITH AUTHENTICATION
+        // ========================================
+        
+        let ws = null; // WebSocket connection instance
+        let isAuthenticated = false; // Authentication status flag
+        let jwtToken = null; // Store JWT token after login
+        let loggedInUser = null; // Store user info after login
+
+        /**
+         * Update the connection status display
+         * @param {string} message - Status message to display
+         * @param {string} className - CSS class for styling
+         */
+        function updateStatus(message, className) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${className}`;
+        }
+
+        /**
+         * Add a message to the messages display area
+         * @param {string|Object} message - Message to display
+         * @param {string} type - Type of message (info, error, success, etc.)
+         */
+        function addMessage(message, type = 'info') {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+
+            // Determine badge and color
+            let badge = '';
+            let badgeClass = 'badge-info';
+            let msgType = type.toLowerCase();
+            if (msgType.includes('error')) badgeClass = 'badge-error';
+            else if (msgType.includes('success')) badgeClass = 'badge-success';
+            else if (msgType.includes('auth')) badgeClass = 'badge-auth';
+            else if (msgType.includes('system')) badgeClass = 'badge-system';
+            else if (msgType.includes('echo')) badgeClass = 'badge-echo';
+            else if (msgType.includes('sent')) badgeClass = 'badge-sent';
+
+            // If message is an object, try to extract type
+            let displayType = type.toUpperCase();
+            let content = '';
+            let time = new Date().toLocaleTimeString();
+            if (typeof message === 'object' && message !== null) {
+                if (message.type) {
+                    displayType = message.type.toUpperCase();
+                    // Map to badge class
+                    if (displayType === 'AUTH_SUCCESS' || displayType === 'AUTH_REQUIRED') badgeClass = 'badge-auth';
+                    else if (displayType === 'ERROR' || displayType === 'AUTH_ERROR') badgeClass = 'badge-error';
+                    else if (displayType === 'SUCCESS') badgeClass = 'badge-success';
+                    else if (displayType === 'SYSTEM') badgeClass = 'badge-system';
+                    else if (displayType === 'ECHO') badgeClass = 'badge-echo';
+                    else if (displayType === 'BROADCAST') badgeClass = 'badge-info';
+                }
+                // Pretty print JSON, but highlight main fields
+                if (message.type === 'echo' && message.data) {
+                    content = `<b>${message.username ? message.username + ': ' : ''}Echoed:</b> ${typeof message.data === 'object' ? `<pre>${JSON.stringify(message.data, null, 2)}</pre>` : message.data}`;
+                } else if (message.type === 'auth_success' && message.user) {
+                    content = `<b>User:</b> ${message.user.username} <span style=\"color:#888\">(${message.user.email}, ${message.user.role})</span>`;
+                } else if (message.type === 'notification') {
+                    content = `<b>${message.title}</b><br>${message.message}`;
+                } else if (message.type === 'system') {
+                    content = `<b>System:</b> ${message.message}`;
+                } else if (message.type === 'broadcast') {
+                    content = `<b>${message.username ? message.username + ': ' : ''}Broadcast:</b> ${typeof message.data === 'object' ? `<pre>${JSON.stringify(message.data, null, 2)}</pre>` : message.data}`;
+                } else {
+                    content = `<pre>${JSON.stringify(message, null, 2)}</pre>`;
+                }
+            } else {
+                content = message;
+            }
+
+            badge = `<span class="badge ${badgeClass}">${displayType}</span>`;
+            messageDiv.innerHTML = `
+                ${badge}
+                <span class="msg-content">${content}</span>
+                <span class="msg-time">${time}</span>
+            `;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        /**
+         * Handle login form submission
+         */
+        function login() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const loginStatus = document.getElementById('loginStatus');
+            loginStatus.textContent = '';
+            if (!email || !password) {
+                loginStatus.textContent = 'Email and password are required';
+                return;
+            }
+            document.getElementById('loginBtn').disabled = true;
+            fetch('http://192.168.100.20:5002/users/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('loginBtn').disabled = false;
+                if (data.success && data.data && data.data.token) {
+                    jwtToken = data.data.token;
+                    loggedInUser = data.data.user;
+                    loginStatus.style.color = '#28a745';
+                    loginStatus.textContent = 'Login successful!';
+                    // Hide login, show connection
+                    document.getElementById('loginContainer').style.display = 'none';
+                    document.getElementById('connectionContainer').style.display = '';
+                    document.getElementById('userInfo').innerHTML = `<b>Logged in as:</b> ${loggedInUser.username} <span style='color:#888'>(${loggedInUser.email})</span>`;
+                } else {
+                    loginStatus.style.color = '#dc3545';
+                    loginStatus.textContent = data.message || 'Login failed';
+                }
+            })
+            .catch(err => {
+                document.getElementById('loginBtn').disabled = false;
+                loginStatus.style.color = '#dc3545';
+                loginStatus.textContent = 'Login error';
+            });
+        }
+
+        /**
+         * Establish WebSocket connection and handle authentication
+         * This function initiates the connection and automatically handles the authentication flow
+         */
+        function connect() {
+            const serverUrl = document.getElementById('serverUrl').value;
+            if (!jwtToken) {
+                alert('You must login first!');
+                return;
+            }
+            try {
+                ws = new WebSocket(serverUrl);
+                ws.onopen = function() {
+                    updateStatus('Connected - Authenticating...', 'connected');
+                    document.getElementById('connectBtn').disabled = true;
+                    document.getElementById('disconnectBtn').disabled = false;
+                    addMessage('WebSocket connection established');
+                };
+                ws.onmessage = function(event) {
+                    try {
+                        const data = JSON.parse(event.data);
+                        addMessage(data, data.type || 'message');
+                        if (data.type === 'auth_required') {
+                            ws.send(JSON.stringify({
+                                type: 'auth',
+                                token: jwtToken
+                            }));
+                            addMessage('Sending authentication token...', 'info');
+                        } else if (data.type === 'auth_success') {
+                            isAuthenticated = true;
+                            updateStatus('Connected & Authenticated', 'authenticated');
+                            document.getElementById('sendBtn').disabled = false;
+                            addMessage('Authentication successful!', 'success');
+                        } else if (data.type === 'auth_error') {
+                            updateStatus('Authentication Failed', 'error');
+                            addMessage('Authentication failed: ' + data.message, 'error');
+                        }
+                    } catch (error) {
+                        addMessage('Received non-JSON message: ' + event.data, 'error');
+                    }
+                };
+                ws.onclose = function() {
+                    updateStatus('Disconnected', 'disconnected');
+                    document.getElementById('connectBtn').disabled = false;
+                    document.getElementById('disconnectBtn').disabled = true;
+                    document.getElementById('sendBtn').disabled = true;
+                    isAuthenticated = false;
+                    addMessage('WebSocket connection closed');
+                };
+                ws.onerror = function(error) {
+                    updateStatus('Connection Error', 'error');
+                    addMessage('WebSocket error: ' + error, 'error');
+                };
+            } catch (error) {
+                addMessage('Failed to connect: ' + error.message, 'error');
+            }
+        }
+
+        /**
+         * Disconnect from WebSocket server
+         * Closes the connection and resets the UI state
+         */
+        function disconnect() {
+            if (ws) {
+                ws.close();
+                ws = null;
+            }
+        }
+
+        /**
+         * Send a message to the WebSocket server
+         * Only works if the user is authenticated
+         */
+        function sendMessage() {
+            // Check if connected and authenticated
+            if (!ws || !isAuthenticated) {
+                alert('Not connected or not authenticated');
+                return;
+            }
+
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            const toUsername = document.getElementById('toUsername').value.trim();
+            
+            if (!message) {
+                alert('Please enter a message');
+                return;
+            }
+
+            try {
+                if (toUsername) {
+                    // Send as private message via HTTP API (since direct socket private not implemented)
+                    fetch('http://192.168.100.20:5002/websocket/send-to-user', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + jwtToken
+                        },
+                        body: JSON.stringify({ username: toUsername, message })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            addMessage(`(To ${toUsername}) Sent: ${message}`, 'sent');
+                        } else {
+                            addMessage(`Failed to send to ${toUsername}: ${data.message}`, 'error');
+                        }
+                    })
+                    .catch(() => {
+                        addMessage(`Failed to send to ${toUsername}: Network error`, 'error');
+                    });
+                } else {
+                    // Send as broadcast via HTTP API
+                    fetch('http://192.168.100.20:5002/websocket/broadcast', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + jwtToken
+                        },
+                        body: JSON.stringify({ message })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            addMessage('(Broadcast) Sent: ' + message, 'sent');
+                        } else {
+                            addMessage('Broadcast failed: ' + data.message, 'error');
+                        }
+                    })
+                    .catch(() => {
+                        addMessage('Broadcast failed: Network error', 'error');
+                    });
+                }
+                messageInput.value = '';
+                document.getElementById('toUsername').value = '';
+            } catch (error) {
+                addMessage('Failed to send message: ' + error.message, 'error');
+            }
+        }
+
+        // ========================================
+        // EVENT LISTENERS
+        // ========================================
+
+        // Allow Enter key to send message
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // ========================================
+        // USAGE INSTRUCTIONS
+        // ========================================
+
+        // Display usage instructions when page loads
+        addMessage('To use this client:', 'info');
+        addMessage('1. Get a JWT token by logging in to your API', 'info');
+        addMessage('2. Enter the token in the JWT Token field', 'info');
+        addMessage('3. Click Connect to establish WebSocket connection', 'info');
+        addMessage('4. The client will automatically authenticate with the token', 'info');
+        addMessage('5. Once authenticated, you can send messages', 'info');
+        addMessage('6. Messages will be echoed back by the server', 'info');
+
+        // Show/hide login and signup forms
+        function showLogin() {
+            document.getElementById('signupContainer').style.display = 'none';
+            document.getElementById('loginContainer').style.display = '';
+        }
+        function showSignup() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('signupContainer').style.display = '';
+        }
+
+        // Handle sign up form submission
+        function signup() {
+            const name = document.getElementById('signupName').value.trim();
+            const username = document.getElementById('signupUsername').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const signupStatus = document.getElementById('signupStatus');
+            signupStatus.textContent = '';
+            signupStatus.style.color = '#dc3545';
+            if (!name || !username || !email || !password) {
+                signupStatus.textContent = 'All fields are required';
+                return;
+            }
+            document.getElementById('signupBtn').disabled = true;
+            fetch('http://192.168.100.20:5002/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, username, email, password })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('signupBtn').disabled = false;
+                if (data.success) {
+                    signupStatus.style.color = '#28a745';
+                    signupStatus.textContent = 'Registration successful! You can now log in.';
+                    // Fill login form for convenience
+                    document.getElementById('loginEmail').value = email;
+                    document.getElementById('loginPassword').value = password;
+                    setTimeout(() => {
+                        showLogin();
+                        document.getElementById('loginStatus').textContent = '';
+                    }, 1200);
+                } else {
+                    signupStatus.style.color = '#dc3545';
+                    signupStatus.textContent = data.message || 'Registration failed';
+                }
+            })
+            .catch(err => {
+                document.getElementById('signupBtn').disabled = false;
+                signupStatus.style.color = '#dc3545';
+                signupStatus.textContent = 'Registration error';
+            });
+        }
+
+        // On page load, show signup by default
+        showSignup();
+    </script>
+</body>
+</html> 
