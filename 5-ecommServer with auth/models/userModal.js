@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema(
       enum: ["admin", "seller", "buyer"],
       default: "buyer",
     },
+    avatar: {
+      type: String,
+      default: "/uploads/users/default.png",
+    },
     password: {
       type: String,
       required: true,

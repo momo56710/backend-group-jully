@@ -4,7 +4,7 @@ const User = require("../models/userModal");
 require("dotenv").config();
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().select("name email");
+    const users = await User.find().select("name email avatar");
     res.status(200).json({ message: "Users fetched successfully", users });
   } catch (error) {
     res
@@ -40,14 +40,17 @@ const createUser = async (req, res) => {
   try {
     const { name, email, address, password, role } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = await User.create({
       name,
       email,
       address,
       password: hashedPassword,
       role,
+      avatar: req.file ? req.file.path : "/uploads/users/default.png",
     });
     res.status(201).json({ message: "User created successfully", user });
+    console.log(user);
   } catch (error) {
     if (error.code === 11000) {
       res.status(400).json({
