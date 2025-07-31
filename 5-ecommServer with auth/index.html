@@ -13,9 +13,17 @@
   </head>
   <body>
     <div class="container">
-      <div style="display: flex; flex-wrap: wrap; overflow-x: auto; gap: 10px;" id="users">
+      <div
+        style="display: flex; flex-wrap: wrap; overflow-x: auto; gap: 10px"
+        id="users"
+      >
         <!-- Cards will be inserted here in a row -->
       </div>
+      <div class="pagination">
+        <button class="btn btn-primary" id="prevPage">Prev</button>
+        <button class="btn btn-primary" id="nextPage">Next</button>
+        <span>Page 1 of 10</span>
+      </div>  
     </div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
@@ -24,8 +32,10 @@
     ></script>
     <script>
       const users = document.getElementById("users");
-      const fetchUsers = async () => {
-        const response = await fetch("http://localhost:3002/api/users");
+      const fetchUsers = async (page = 1) => {
+        const response = await fetch(
+          `http://localhost:3002/api/users?page=${page}`
+        );
         const data = await response.json();
         console.log(data);
         data.users.forEach((user) => {
@@ -43,6 +53,16 @@
             </div>
           `;
           users.appendChild(colDiv);
+        });
+        const pagination = document.querySelector(".pagination");
+
+        const prevPage = document.getElementById("prevPage");
+        const nextPage = document.getElementById("nextPage");
+        prevPage.addEventListener("click", () => {
+          fetchUsers(data.pagination.prevPage);
+        });
+        nextPage.addEventListener("click", () => {
+          fetchUsers(data.pagination.nextPage);
         });
       };
       fetchUsers();

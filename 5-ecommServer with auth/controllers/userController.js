@@ -4,8 +4,33 @@ const User = require("../models/userModal");
 require("dotenv").config();
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().select("name email avatar");
-    res.status(200).json({ message: "Users fetched successfully", users });
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 20;
+    const search = req.query.search || "";
+    const skip = (page - 1) * limit;
+    const users = await User.find({
+      $or: [
+        { name: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+      ],
+    })
+      .select("name email avatar")
+      .skip(skip)
+      .limit(limit)
+      .sort({ email: 1 });
+    const totalUsers = await User.countDocuments();
+    const totalPages = Math.ceil(totalUsers / limit);
+    res.status(200).json({
+      message: "Users fetched successfully",
+      users,
+      pagination: {
+        totalPages,
+        totalUsers,
+        currentPage: page,
+        nextPage: page < totalPages ? page + 1 : null,
+        prevPage: page > 1 ? page - 1 : null,
+      },
+    });
   } catch (error) {
     res
       .status(500)
@@ -42,8 +67,8 @@ const createUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
-      name,
-      email,
+      name: name.toLowerCase(),
+      email: email.toLowerCase(),
       address,
       password: hashedPassword,
       role,
