@@ -1,0 +1,11 @@
+{
+  "_id": {
+    "$oid": "685a74399260454ae395509b"
+  },
+  "title": "My First Post",
+  "content": "This is the content of my first post.",
+  "creator": {
+    "$oid": "685a7424904a4a0431619190"
+  },
+  "__v": 0
+}
