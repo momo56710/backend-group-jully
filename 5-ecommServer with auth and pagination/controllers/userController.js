@@ -64,6 +64,7 @@ const loginUser = async (req, res) => {
 const createUser = async (req, res) => {
   try {
     const { name, email, address, password, role } = req.body;
+    console.log(req.body);
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
@@ -79,8 +80,7 @@ const createUser = async (req, res) => {
   } catch (error) {
     if (error.code === 11000) {
       res.status(400).json({
-        message: "User already exists",
-        error: "email must be unique",
+        error: error.message,
       });
     } else {
       res
